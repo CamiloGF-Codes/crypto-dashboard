@@ -6,7 +6,7 @@ class Crypto(Base):
     __tablename__ = "cryptos"
 
     id = Column(Integer, primary_key=True, index=True)
-    symbol = Column(String, nullable=False)
+    symbol = Column(String, nullable=False,unique=True)
     name = Column(String, nullable=False)
     price_usd = Column(Float, nullable=False)
     market_cap = Column(Float)
