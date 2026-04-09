@@ -25,7 +25,7 @@ async def sync_crypto_prices(db: Session):
     repo = CryptoRepository(db)
 
     for coin_id, values in data.items():
-        repo.upsert(
+        repo.create(
             symbol=coin_id.upper(),
             name=coin_id.capitalize(),
             price_usd=values["usd"],
