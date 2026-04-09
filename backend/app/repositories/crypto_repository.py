@@ -23,3 +23,16 @@ class CryptoRepository:
 
     def get_by_symbol(self, symbol: str):
         return self.db.query(Crypto).filter(Crypto.symbol == symbol).first()
+    
+    def upsert(self, symbol: str, name: str, price_usd: float, market_cap: float):
+        crypto = self.get_by_symbol(symbol)
+
+        if crypto:
+            crypto.price_usd = price_usd
+            crypto.market_cap = market_cap
+            self.db.commit()
+            self.db.refresh(crypto)
+        else:
+            crypto = self.create(symbol, name, price_usd, market_cap)
+
+        return crypto
