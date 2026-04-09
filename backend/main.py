@@ -5,6 +5,7 @@ from app.database import engine, Base, SessionLocal
 from app.models import crypto
 from app.routes.crypto_routes import router as crypto_router
 from app.services.crypto_service import sync_crypto_prices
+from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
 
@@ -28,6 +29,13 @@ async def lifespan(app: FastAPI):
     print("Scheduler apagado")
 
 app = FastAPI(title="Crypto Dashboard API", version="1.0.0", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(crypto_router)
 
