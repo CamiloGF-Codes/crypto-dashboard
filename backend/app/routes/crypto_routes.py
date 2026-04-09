@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.repositories.crypto_repository import CryptoRepository
+from app.services.crypto_service import sync_crypto_prices
 
 router = APIRouter(prefix="/cryptos", tags=["cryptos"])
 
@@ -25,3 +26,8 @@ def create_crypto(
 def get_crypto_by_symbol(symbol: str, db: Session = Depends(get_db)):
     repo = CryptoRepository(db)
     return repo.get_by_symbol(symbol)
+
+@router.post("/sync")
+async def sync_prices(db: Session = Depends(get_db)):
+    data = await sync_crypto_prices(db)
+    return {"message": "Prices synced", "data": data}
