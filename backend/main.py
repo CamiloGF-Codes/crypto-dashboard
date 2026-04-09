@@ -1,11 +1,33 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from app.database import engine, Base
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from app.database import engine, Base, SessionLocal
 from app.models import crypto
 from app.routes.crypto_routes import router as crypto_router
+from app.services.crypto_service import sync_crypto_prices
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Crypto Dashboard API", version="1.0.0")
+scheduler = AsyncIOScheduler()
+
+async def scheduled_sync():
+    db = SessionLocal()
+    try:
+        await sync_crypto_prices(db)
+        print("Sync completado")
+    finally:
+        db.close()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    scheduler.add_job(scheduled_sync, "interval", minutes=5)
+    scheduler.start()
+    print("Scheduler iniciado")
+    yield
+    scheduler.shutdown()
+    print("Scheduler apagado")
+
+app = FastAPI(title="Crypto Dashboard API", version="1.0.0", lifespan=lifespan)
 
 app.include_router(crypto_router)
 
