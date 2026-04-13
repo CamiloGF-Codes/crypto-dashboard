@@ -63,3 +63,9 @@ uvicorn main:app --reload
 ## Author
 
 Camilo González — [GitHub](https://github.com/CamiloGF-Codes)
+
+## Live Demo
+
+- **API:** https://crypto-dashboard-production-e075.up.railway.app
+- **Dashboard:** https://exquisite-lily-c26ec9.netlify.app
+- **API Docs:** https://crypto-dashboard-production-e075.up.railway.app/docs
