@@ -1,4 +1,4 @@
-const API_URL = 'http://127.0.0.1:8000'
+const API_URL = 'crypto-dashboard-production-e075.up.railway.app'
 
 async function fetchCryptos() {
   try {
