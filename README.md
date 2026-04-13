@@ -67,5 +67,5 @@ Camilo González — [GitHub](https://github.com/CamiloGF-Codes)
 ## Live Demo
 
 - **API:** https://crypto-dashboard-rvy9.onrender.com
-- **Dashboard:** https://exquisite-lily-c26ec9.netlify.app
+- **Dashboard:** https://cryptos-dashboard13.netlify.app
 - **API Docs:** https://crypto-dashboard-rvy9.onrender.com/docs
