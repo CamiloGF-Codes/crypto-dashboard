@@ -1,4 +1,4 @@
-const API_URL = 'https://crypto-dashboard-production-e075.up.railway.app'
+const API_URL = 'https://crypto-dashboard-rvy9.onrender.com'
 
 async function fetchCryptos() {
   try {
