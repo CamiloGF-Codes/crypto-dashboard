@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from app.models.crypto import Crypto
+from app.models.price_history import PriceHistory
 
 class CryptoRepository:
 
@@ -24,6 +25,25 @@ class CryptoRepository:
     def get_by_symbol(self, symbol: str):
         return self.db.query(Crypto).filter(Crypto.symbol == symbol).first()
     
+    def add_history(self, crypto:Crypto):
+
+        if self.db.query(PriceHistory).filter(PriceHistory.crypto_id == crypto.id).count() == 5:
+            self.db.delete(
+                self.db.query(PriceHistory)\
+                .filter(PriceHistory.crypto_id == crypto.id)\
+                .order_by(PriceHistory.recorded_at)\
+                .first()
+            )
+            self.db.commit()
+            
+        history = PriceHistory(
+                    crypto_id=crypto.id,
+                    price_usd=crypto.price_usd 
+                    )
+        self.db.add(history)
+        self.db.commit()
+
+    
     def upsert(self, symbol: str, name: str, price_usd: float, market_cap: float):
         crypto = self.get_by_symbol(symbol)
 
@@ -32,7 +52,9 @@ class CryptoRepository:
             crypto.market_cap = market_cap
             self.db.commit()
             self.db.refresh(crypto)
+            self.add_history(crypto)
         else:
             crypto = self.create(symbol, name, price_usd, market_cap)
+            self.add_history(crypto)
 
         return crypto
