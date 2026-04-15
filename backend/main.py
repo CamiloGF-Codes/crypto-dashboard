@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from app.database import engine, Base, SessionLocal
 from app.models import crypto
+from app.models import price_history
 from app.routes.crypto_routes import router as crypto_router
 from app.services.crypto_service import sync_crypto_prices
 from fastapi.middleware.cors import CORSMiddleware
