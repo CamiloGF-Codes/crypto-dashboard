@@ -40,3 +40,16 @@ async def sync_crypto_prices(db: Session):
         )
 
     return data
+
+async def add_crypto_price(db: Session, crypto_id: str):
+    data = await fetch_crypto_prices([crypto_id])
+
+    repo = CryptoRepository(db)
+    coin_id, values = next(iter(data.items()))
+    
+    return repo.upsert(
+        symbol=coin_id.upper(),
+        name=coin_id.capitalize(),
+        price_usd=values["usd"],
+        market_cap=values.get("usd_market_cap", 0)
+    )
